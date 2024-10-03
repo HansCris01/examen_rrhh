@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/cuentas', 'CuentaController@listar_cuentas'); //listar usuario
 Route::get('/detalle_cuenta/{id}', 'HistorialTransaccioneController@ver_detalle_cuenta'); //Detalle de la cuenta
 Route::resource('/retiro','HistorialTransaccioneController');  //Retiro
-
+Route::resource('/transferencia','CuentaController');  //Transferencia
 
 
 
@@ -39,6 +39,10 @@ backend : microservicios
 Front end : Es donde consume los servicios pequeños, para que la WEB sea dinámica como un Software
 
 API: Son integraciones de un Sistema a otro Sistema, en este caso no se aplica ya que no se trata de 
-una inrtegracion ajena al servidor
+una inrtegracion ajena al servidor:
+
+Ejemplo:
+
+La integración de Sunat
 
 */ 

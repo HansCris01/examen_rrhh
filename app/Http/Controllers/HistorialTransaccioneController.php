@@ -81,21 +81,92 @@ class HistorialTransaccioneController extends Controller
      * @param  \App\Models\Historial_transaccione  $historial_transaccione
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $codigo_historial_transacciones) #Retiro
+    public function update(Request $request, $id) #Retiro
     {
-    
-      #comision del 2% del retiro
-   
-       $monto = $request->monto;
-       $comision = 0.02;
+      
+      $Cuenta = Cuenta::where("id","=", $id)->select("cuentas.saldo", "tipo_cuentas.codigo_tipo_cuenta" ,"tipo_cuentas.nombre_tipo_cuenta")
+      ->join('tipo_cuentas','tipo_cuentas.codigo_tipo_cuenta','cuentas.codigo_tipo_cuenta')
+      ->first();
+      $saldo = $Cuenta->saldo;
+      $codigo_tipo_cuenta = $Cuenta->codigo_tipo_cuenta;
+      $saldo_minimo = 100;
+      $monto = $request->monto;
+     
 
-       $calculo = ($comision / 100) * $monto; 
+      if($saldo >= $saldo_minimo && $codigo_tipo_cuenta == 1){ #cuenta standar
+        
+        
+      if($monto > $saldo ){
 
-       $datos = [ 
-         "monto" => $calculo,
-       ];
+        return response()->json(['Saldo insuficiente']);
+
+      } elseif($monto < $saldo || $monto == $saldo) {
+
+            #comision del 2% del retiro
+                    
+            $comision = 2;
+
+            $calculo = ($comision / 100) * $monto; 
+            $calculo2 = $monto + $calculo;
+            $calculo3 = $saldo - $calculo2;
+            $datos = [ 
+            "saldo" => $calculo3,
+            ];
+
+            Cuenta::where('id','=',$id)->update($datos);
+
+            //agregar al historial de movimientos de transacciones
+
+            $historial_transaccione = new Historial_transaccione();
+
+            $historial_transaccione->id = $id;
+            $historial_transaccione->codigo_tipo = 2; #retiro
+            $historial_transaccione->monto = $monto;
+            #la fecha es tomada del sistema que es created_at
+            $historial_transaccione->save();
+
+      } 
+
+      
+       }elseif($codigo_tipo_cuenta == 2){ #cuenta Premium
+
        
-       Historial_transaccione::where('codigo_historial_transacciones','=',$codigo_historial_transacciones)->update($datos);
+       if($monto > $saldo ){
+
+        return response()->json(['Saldo insuficiente']);
+
+       } elseif($monto < $saldo || $monto == $saldo) {
+        #comision del 2% del retiro
+                    
+        $comision = 2;
+
+        $calculo = ($comision / 100) * $monto; 
+        $calculo2 = $monto + $calculo;
+        $calculo3 = $saldo - $calculo2;
+        $datos = [ 
+        "saldo" => $calculo3,
+        ];
+       
+       Cuenta::where('id','=',$id)->update($datos);
+       
+
+        //agregar al historial de movimientos de transacciones
+
+        $historial_transaccione = new Historial_transaccione();
+
+        $historial_transaccione->id = $id;
+        $historial_transaccione->codigo_tipo = 2; #retiro
+        $historial_transaccione->monto = $monto;
+        #la fecha es tomada del sistema que es created_at
+        $historial_transaccione->save();
+
+       }
+
+        }elseif($saldo < $saldo_minimo && $codigo_tipo_cuenta == 1){
+
+          return response()->json(['Operacion rechazada']);
+
+        }
      
     }
 
