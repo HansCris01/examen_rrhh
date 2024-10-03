@@ -1,3 +1,6 @@
+#Se uso XAMPP 
+#PHP version: 7.4
+#PhpMyAdmin para la Base de datos
 
 Ejecutar en esa orden: 
 
