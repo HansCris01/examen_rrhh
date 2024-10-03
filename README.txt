@@ -15,16 +15,16 @@ Ejecutar en esa orden:
 
 Consumir microservicios
 
-1) Ver cuentas
+1) Ver cuentas  metodo : GET
 
 http://localhost:81/examen_rrhh/servicio_web/public/api/cuentas
 
 
-2) Detalle de la cuenta buscando por el id de la cuenta:
+2) Detalle de la cuenta buscando por el id de la cuenta, metodo : GET
 
 http://localhost:81/examen_rrhh/servicio_web/public/api/detalle_cuenta/2
 
-3) Para retiro:
+3) Para retiro: metodo : PUT
 Nota: Tienes que usar una herramienta como POSTMAN para poder consumir los servicios
 
 El id = 1 que esta en la URL es el id de la cuenta a la que va hacer retiro
@@ -41,7 +41,7 @@ seleccione JSON y escriba este codigo:
 Le da SEND y ya esta funcionando.
 
 
-4) Para transferencia:
+4) Para transferencia metodo : PUT
 
 El id = 1 que esta en la URL es el id de la cuenta va enviar la transferencia
 
@@ -58,5 +58,20 @@ seleccione JSON y escriba este codigo:
 Le da SEND y ya esta funcionando.
 
 
-5) Para deposito:
+5) Para deposito, metodo : POST
 
+  link: http://localhost:81/examen_rrhh/servicio_web/public/api/depositar
+
+En el postman tienes que ir a Body
+vas a tener estas opciones:
+
+none, form-data, x-www-form-urlencoded, raw, binary, GraphQl
+
+VAMOS SELECCIONAR: raw    va aparecer el selector al lado de GraphQl seleccionas JSON
+
+colocas este código:
+
+{
+   "id": 1,
+   "monto": 1000
+}

@@ -26,9 +26,7 @@ Route::get('/cuentas', 'CuentaController@listar_cuentas'); //listar usuario
 Route::get('/detalle_cuenta/{id}', 'HistorialTransaccioneController@ver_detalle_cuenta'); //Detalle de la cuenta
 Route::resource('/retiro','HistorialTransaccioneController');  //Retiro
 Route::resource('/transferencia','CuentaController');  //Transferencia
-
-
-
+Route::post('/depositar', 'HistorialTransaccioneController@create'); //Se usa para Depositar
 
 
 /* Este es MICROSERVICIO, ya son pequeñas funciones que se aplica en una arquitectura de Software  

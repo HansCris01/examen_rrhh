@@ -26,9 +26,34 @@ class HistorialTransaccioneController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request) #Depositar
     {
         //
+        $id = $request->id;
+        $monto = $request->monto;
+
+        $Historial_transaccione = new Historial_transaccione();
+        $Historial_transaccione->id = $id;
+        $Historial_transaccione->codigo_tipo = 1;
+        $Historial_transaccione->monto = $monto;
+
+        $Historial_transaccione->save();
+       
+        $Cuenta = Cuenta::where("id","=", $id)->select("cuentas.saldo", "tipo_cuentas.codigo_tipo_cuenta" ,"tipo_cuentas.nombre_tipo_cuenta")
+        ->join('tipo_cuentas','tipo_cuentas.codigo_tipo_cuenta','cuentas.codigo_tipo_cuenta')
+        ->first();
+        $saldo = $Cuenta->saldo;
+       
+
+        $calculo = $monto + $saldo;
+
+        $dato = [
+        "saldo" => $calculo,
+
+        ];
+
+        Cuenta::where('id','=',$id)->update($dato);
+
     }
 
     /**
